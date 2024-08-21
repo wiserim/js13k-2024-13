@@ -6,7 +6,7 @@
         "dev": "vite dev --config config/vite.config.js",
         "build": "vite build --config config/vite.config.js",
         "preview": "vite preview --config config/vite.config.js",
-        "lint": "eslint --config config/eslint.config.mjs"
+        "lint": "eslint --config eslint.config.mjs"
     },
     "author": "Marcin Walczak",
     "license": "ISC",
