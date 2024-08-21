@@ -1,7 +1,6 @@
 import Game from './game';
-import {encode} from './codec/array/encoder';
-import {decode} from './codec/array/decoder';
-import {encode1d, encode2d, decode1d} from './coder';
+import {encode, encode2d} from './codec/array/encoder';
+import {decode, decode2d} from './codec/array/decoder';
 
 console.log('hello world');
 const bbb = 'aa';
@@ -69,7 +68,7 @@ console.log('-------------');
 //17
 //
 
-/*
+
 const e = [
 	[ 1, 1, 1 ],
 	[ 1, 0, 1 ],
@@ -79,12 +78,12 @@ const e = [
 ];
 console.log(e);
 console.log(encode2d(e));
-console.log(decode1d(encode1d(e)));
+console.log(decode2d(encode2d(e)));
 console.log('-------------');
 //31715151517
 //0x3575557
 
-*/
+
 console.log('encode / decode "M" path');
 const f = [90,130,95,25,150,80,205,25,210,130];
 console.log(f);
@@ -122,3 +121,81 @@ for(let i = 0; i < 100; i++) {
 console.log('tArr', tArr);
 let encodedTArr = encode(tArr);
 console.log('encodedTArr', encodedTArr);
+
+//decode letters
+let letters = {
+    '0': 0x3575557,
+    '1': 0x1511111,
+    '2': 0x3571747,
+    '3': 0x3571717,
+    '4': 0x3555711,
+    '5': 0x3574717,
+    '6': 0x3574757,
+    '7': 0x3571111,
+    '8': 0x3575757,
+    '9': 0x3575717,
+    'A': 0x3525575,
+    'B': 0x3565756,
+    'C': 0x3574447,
+    'D': 0x3565556,
+    'E': 0x3574747,
+    'F': 0x3574644,
+    'G': 0x4568b96,
+    'H': 0x3555755,
+    'I': 0x3572227,
+    'J': 0x3571157,
+    'K': 0x459aca9,
+    'L': 0x3544447,
+    'M': 0x551b15151111,
+    'N': 0x459db99,
+    'O': 0x3575557,
+    'P': 0x3575744,
+    'Q': 0x45699b7,
+    'R': 0x3565565,
+    'S': 0x3574717,
+    'T': 0x3572222,
+    'U': 0x3555557,
+    'V': 0x5511110a0a04,
+    'W': 0x55111115151b,
+    'X': 0x55110a040a11,
+    'Y': 0x3555222,
+    'Z': 0x551f0204081f,            
+    ' ': 0x3500000,
+    '.': 0x2500002,
+    '!': 0x2522202,
+    '?': 0x3571202,
+    ',': 0x2500012,
+    '\'': 0x2522000,
+    '-': 0x3500f00   
+};
+
+function decodeLetter(hex) {
+    let split = hex.toString(16).split(''),
+        width = parseInt(split[0], 16),
+        height = parseInt(split[1], 16),
+        valLength = Math.ceil(width / 4),
+        decoded = [];
+
+    for(let i = 2; i < split.length; i++) {
+        let val = split[i];
+        for(let j = 1; j < valLength; j++) {
+            i++;
+            val += split[i];
+        }
+
+        let hexRow = parseInt(val, 16);
+        let binary = hexRow.toString(2).padStart(width,0);
+        decoded.push(binary.split('').map(Number));
+    }
+
+    return {
+        width: width,
+        height: height,
+        map: decoded
+    };
+}
+
+for(let letter in letters) {
+	let decoded = decodeLetter(letters[letter]);
+	console.log(letter, decoded);
+}

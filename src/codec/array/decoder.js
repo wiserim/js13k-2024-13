@@ -29,4 +29,13 @@ export function decode(encoded) {
         .map(val => parseInt(val, 2));
 }
 
+export function decode2d(encoded) {
+    //get array columns length
+    let arrWidth = parseInt(encoded[0], 36),
+        //decode 1d array
+        arr1d = decode(encoded.slice(1));
+        //split array into columns
+        return Array.from({ length: Math.ceil(arr1d.length / arrWidth) }, (val, i) => arr1d.slice(i * arrWidth, i * arrWidth + arrWidth));
+}
+
 export default decode;

@@ -24,4 +24,11 @@ export function encode(arr) {
         .reduce((acc, val) => acc + parseInt(val, 2).toString(36), binMaxlength.toString(36));
 }
 
+export function encode2d(arr) {
+    let arrWidth = arr[0].length.toString(36)
+
+    return arrWidth + encode([].concat(...arr));
+
+}
+
 export default encode;
