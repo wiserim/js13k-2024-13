@@ -2,7 +2,7 @@
  * Decode encoded array.
  * 
  * @param {string} encoded
- * @returns {number[]}
+ * @return {number[]}
 */
 export function decode(encoded) {
     //get binary values length
@@ -29,6 +29,12 @@ export function decode(encoded) {
         .map(val => parseInt(val, 2));
 }
 
+/*
+ * Decode encoded array.
+ * 
+ * @param {string} encoded Encoded 2D array
+ * @return {number[][]}
+*/
 export function decode2d(encoded) {
     //get array columns length
     let arrWidth = parseInt(encoded[0], 36),

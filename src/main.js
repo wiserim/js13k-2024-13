@@ -2,6 +2,9 @@ import Game from './game';
 import {encode, encode2d} from './codec/array/encoder';
 import {decode, decode2d} from './codec/array/decoder';
 
+//import {letters, decodeLetters} from './letters';
+import {Text} from './entity/text';
+
 console.log('hello world');
 const bbb = 'aa';
 
@@ -123,6 +126,7 @@ let encodedTArr = encode(tArr);
 console.log('encodedTArr', encodedTArr);
 
 //decode letters
+/*
 let letters = {
     '0': 0x3575557,
     '1': 0x1511111,
@@ -194,8 +198,40 @@ function decodeLetter(hex) {
         map: decoded
     };
 }
-
+/*
 for(let letter in letters) {
 	let decoded = decodeLetter(letters[letter]);
-	console.log(letter, decoded);
+	let arr = '[';
+	for(let i of decoded.map) {
+		arr += '[';
+		arr += i.join(',');
+		arr += '],';
+	}
+	arr += ']';
+
+	console.log(letter, arr);
+	//console.table(decoded.map);
 }
+*/
+/*
+console.log(encode2d([
+	[0,0,0],
+	[0,0,0],
+	[0,0,0],
+	[0,0,0],
+	[0,0,0]
+]),
+decode2d('31000'))
+
+console.log(letters);
+decodeLetters();
+console.log(letters);
+*/
+//decodeLetters();
+//window.letters = letters;
+
+let text = new Text({
+	x: 100,
+	text:['aaa', 'bbb', 'co a robię ze swoim życiem?']
+});
+console.log(text);

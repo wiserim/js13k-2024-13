@@ -2,8 +2,8 @@
  * Encode array of integers to string.
  * Array values must be natural numbers (>= 0). 
  * 
- * @param {number[]} arr
- * @returns {string}
+ * @param {number[]} arr array to encode
+ * @return {string}
 */
 export function encode(arr) {
     let binMaxlength = 0,
@@ -24,6 +24,14 @@ export function encode(arr) {
         .reduce((acc, val) => acc + parseInt(val, 2).toString(36), binMaxlength.toString(36));
 }
 
+/*
+ * Encode two dimensional array of integers to string.
+ * Array values must be natural numbers (>= 0).
+ * Max. array width: 35
+ * 
+ * @param {number[][]} arr 2D array to encode
+ * @return {string}
+*/
 export function encode2d(arr) {
     let arrWidth = arr[0].length.toString(36)
 
