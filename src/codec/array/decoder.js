@@ -18,15 +18,16 @@ export function decode(encoded) {
             .reduce((acc, val) => acc + (parseInt(val, 36).toString(2).padStart(5, 0)), parseInt(encoded[1], 36).toString(2)),
         //optionally pad string with '0'
         modulo = encodedBinaries.length % binLength;
-        
+
     if(modulo) {
-        encodedBinaries = encodedBinaries.padStart(encodedBinaries.length + (binLength - modulo), 0);
+        encodedBinaries = encodedBinaries.padStart(encodedBinaries.length + binLength - modulo, 0);
     }
 
     //split encoded biniaries into binary values and parse to integers
+    //decrease value by 1 to bring back 0's
     return encodedBinaries
         .match(regex)
-        .map(val => parseInt(val, 2));
+        .map(val => parseInt(val, 2) - 1);
 }
 
 /*

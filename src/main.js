@@ -1,13 +1,14 @@
-import Game from './game';
+//import Game from './game';
 import {encode, encode2d} from './codec/array/encoder';
 import {decode, decode2d} from './codec/array/decoder';
 
 //import {letters, decodeLetters} from './letters';
+import {Entity} from './entity/entity';
 import {Text} from './entity/text';
 
 console.log('hello world');
 const bbb = 'aa';
-
+/*
 const g = new Game();
 g.init();
 g.render();
@@ -198,7 +199,7 @@ function decodeLetter(hex) {
         map: decoded
     };
 }
-/*
+
 for(let letter in letters) {
 	let decoded = decodeLetter(letters[letter]);
 	let arr = '[';
@@ -230,8 +231,28 @@ console.log(letters);
 //decodeLetters();
 //window.letters = letters;
 
+window.game = {a: 1, b: 2};
+
+let canvas = document.getElementById('c');
+let ctx = canvas.getContext('2d');
+game.ctx = ctx;
+
 let text = new Text({
-	x: 100,
-	text:['aaa', 'bbb', 'co a robię ze swoim życiem?']
+	x: 200,
+	y: 150,
+	text: ['aaa'],//, 'bbb', 'co a robie ze swoim zyciem?'],
+	background: 'green',
+	padding: [2,2]
 });
 console.log(text);
+text.draw();
+
+let entity = new Entity({
+	x: 100,
+	y: 150,
+	width: 50,
+	height: 50,
+	background: '#f00'
+});
+console.log(entity)
+entity.draw();
