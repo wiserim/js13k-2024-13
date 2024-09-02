@@ -38,7 +38,7 @@ export function encode(arr) {
 export function encode2d(arr) {
     let arrWidth = arr[0].length.toString(36)
 
-    return arrWidth + encode([].concat(...arr));
+    return arrWidth + encode(arr.flat());
 
 }
 

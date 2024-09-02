@@ -1,28 +1,105 @@
-class Game {
-	constructor() {
-		this.delta = 1/60000; // 1/60s in ms
-        this.deltaT = 0;
-        //this.canvas = o.canvas
-        this.ctx = c2d.getContext('2d');
-        //this.canvasSize = new Smol.Vector(o.width ?? 0, o.height ?? 0)
-        //this.responsive = o.responsive ?? 0
-        //this.camera = new Smol.Camera(0,0,t.canvasSize.x, t.canvasSize.y)
-        //this.controls = new Smol.Controls()
-        this.scenes = {};
-        //this.events = new Smol.Events(t)
-        //this.assets = new Smol.Assets(o.assets ?? [])
-        this.paused = false;
-	}
+let game = {
+    time: 0,
+	delta: 1/60000, // 1/60s in ms
+    deltaT: 0,
+    width: c.width,
+    height: c.height,
+    ctx: c.getContext('2d'),
+    scenes: {},
+    paused: false,
+    mouse: {
+        x: 0,
+        y: 0,
+        down: 0
+    },
 
-	init() {
+	init: () => {
+        let t = game;
+        window.game = t;
+        t.ctx.translate(0.5, 0.5);
+        t.ctx.lineWidth = 1;
+        t.ctx.imageSmoothingEnabled = false;
+        
+        //mouse events
+        c.addEventListener('mousedown', (e) => {
+            let box = c.getBoundingClientRect();    
+            t.mouse.x = (e.pageX - box.x) / box.width * 320;
+            t.mouse.y = (e.pageY - box.y) / box.height * 240;
+            t.mouse.down = 1;
+        });
 
-	}
+        c.addEventListener('mousemove', (e) => {
+            let box = c.getBoundingClientRect();
+            t.mouse.x = (e.pageX - box.x) / box.width * 320;
+            t.mouse.y = (e.pageY - box.y) / box.height * 240;
+        });
+        /*
+        window.addEventListener('resize', function(args) {
+            t.rescale();
+        }, false);
+        */
+
+        t.time = performance.now();
+
+        t.update();
+	},
 
 	render() {
-        for(const key in this.scenes) {
+        for(let key in this.scenes) {
             this.scenes[key].draw();
         }
+    },
+
+    update() {
+        let t = this;
+        //frame
+        let dt = performance.now() - t.time;
+        
+        if(dt < t.delta || t.paused) {
+            requestAnimationFrame(t.update.bind(t));
+            return;
+        }
+        t.ctx.clearRect(0,0,320,240);
+        t.ctx.imageSmoothingEnabled = false;
+        
+        t.time += dt
+        t.deltaT = dt
+
+        for(let key in t.scenes) {
+            t.scenes[key].update()
+        }
+
+        t.render();
+        t.mouse.down = 0;
+        requestAnimationFrame(t.update.bind(t));
+    },
+    /*
+    getPixelRatio() {
+        let t = this,
+        dpr = window.devicePixelRatio || 1,
+        bsr = t.ctx.webkitBackingStorePixelRatio ||
+        t.ctx.mozBackingStorePixelRatio ||
+        t.ctx.msBackingStorePixelRatio ||
+        t.ctx.oBackingStorePixelRatio ||
+        t.ctx.backingStorePixelRatio || 1;
+
+          return dpr / bsr;
+    },
+
+    rescale() {
+      let t = this,
+      pixelRatio = t.getPixelRatio(),
+      width = c.width * pixelRatio,
+      height = c.height * pixelRatio;
+
+      if(width != t.ctx.canvas.width)
+        t.ctx.canvas.width = width;
+      if (height != t.ctx.canvas.height)
+        t.ctx.canvas.height = height;
+
+      t.ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     }
+    */
 }
 
-export default Game;
+export default game;

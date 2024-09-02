@@ -2,13 +2,14 @@ import {Entity} from './entity';
 import {letters} from '../letters';
 
 export class Text extends Entity {
-    _text = ['']
+    _text = [''];
 
 	constructor(args) {
 		super(args);
         let t = this;
         t.color = args.color ?? '#000';
         t.size = args.size ?? 1;
+        t.lineMargin = args.lineMargin ?? 2;
         t.padding = args.padding ?? [0, 0];
         t.text = args.text ?? '';
 	}
@@ -21,13 +22,12 @@ export class Text extends Entity {
             t._text = [text.toUpperCase()];
         }
         else {
-            for(let i in text) {
-                text[i] = text[i].toUpperCase();
+            t._text = Array.from(text);
+            for(let i in t._text) {
+                t._text[i] = t._text[i].toUpperCase();
             }
-            t._text = text;
         }
 
-        console.log(t._text)
         //calculate text dimensions
         for(let i in t._text) {
             let line = [],
@@ -45,12 +45,10 @@ export class Text extends Entity {
             length += line.length - 1;
             maxLength = Math.max(maxLength, length);
             t._text[i] = line;
-
-            console.log(length, maxLength)
         }
 
         t.width = maxLength * t.size + t.padding[0] * 2;
-        t.height = (t._text.length * 6 - 1) * t.size + t.padding[1] * 2;
+        t.height = (t._text.length * (6 + t.lineMargin) - 1 * t.size) * t.size - t.lineMargin + t.padding[1] * 2;
 	}
 
 	get text() {
@@ -60,21 +58,16 @@ export class Text extends Entity {
     draw() {
         let t = this,
             needed = [],
-            pX = -t.width/2,
-            pY = -t.height/2;
-
-        if(!t.active || !t.alpha)
+            pX = t.x - t.width * t.origin[0],
+            pY = t.y - t.height * t.origin[1];
+        
+        if(!t._beforeDraw())
             return;
-
-        t.game.ctx.save();
-
-        t._drawTransform();
-
-        t.game.ctx.globalAlpha = t.alpha;
         
         if(t.background) {
             t.game.ctx.fillStyle = t.background;
-            t.game.ctx.fillRect(pX, pY, t.width, t.height);
+            //t.game.ctx.fillRect(pX, pY, t.width, t.height);
+            t.game.ctx.fillRect(t.x - t.width * t.origin[0], t.y - t.height * t.origin[1], t.width, t.height);
         }
 
         t.game.ctx.fillStyle = t.color;        
@@ -86,8 +79,6 @@ export class Text extends Entity {
                 let letter = t._text[i][j],
                     curY = t.padding[1],
                     addX = 0;
-
-                console.log(letter)
 
                 for (let y in letter) {
                     let row = letter[y];
@@ -101,9 +92,10 @@ export class Text extends Entity {
                 curX += (letter[0].length + 1) * t.size;
             }
 
-            pY += t.size * 6;
+            pY += t.size * 6 + t.lineMargin;
         }
 
-        t.game.ctx.restore();
+        //t.game.ctx.restore();
+        t._afterDraw();
     }
 }

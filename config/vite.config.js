@@ -12,5 +12,29 @@ export default defineConfig({
 			include: ['../src/**/*.js'],
 		    exclude: ['../config/**/*.js'],
 		})
-	]
+	],
+	build: {
+		outDir: "./dist",
+		target: "esnext",
+		minify: "terser",
+		cssCodeSplit: false,
+		terserOptions: {
+			keep_classnames: false,
+			keep_fnames: false,
+			mangle:{
+				properties: true,
+				toplevel: true
+			}
+		},
+		rollupOptions: {
+			input: "src/main.js",
+			output: {
+				inlineDynamicImports: true,
+				format: "iife",
+				name: "TBD",
+				entryFileNames: `[name].js`,
+				assetFileNames: `[name][extname]`,
+			},
+		}
+	}
 });
