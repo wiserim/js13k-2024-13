@@ -4,10 +4,10 @@ export class File extends Group {
 	constructor() {
 		super({x: 160, y: 123, width: 300, height: 234 });
         let t = this;
-		t._image = document.createElement('canvas');
-		t._image.width = t.width;
-		t._image.height = t.height;
-        t._ctx = t._image.getContext('2d');
+		t._img = document.createElement('canvas');
+		t._img.width = t.width;
+		t._img.height = t.height;
+        t._ctx = t._img.getContext('2d');
         t._ctx.imageSmoothingEnabled = false;
 
         t._generateImage();
@@ -32,8 +32,8 @@ export class File extends Group {
         paper = new Path2D("M10 234 L 10 20 L 20 15 L 290 15 L 290 234 Z");
         t._ctx.fill(paper);
 
-        let imageData = t._ctx.getImageData(0, 0, t.width, t.height);
-  		let data = imageData.data;
+        let imgData = t._ctx.getImageData(0, 0, t.width, t.height),
+  			data = imgData.data;
   		
   		for(let i = 0; i < data.length; i += 4) {
 		    let grain = Math.floor(Math.random() * 8) - 4;
@@ -42,7 +42,7 @@ export class File extends Group {
 		    data[i + 2] += grain; // blue
 		    //data[i + 3];//alpha
   		}
-  		t._ctx.putImageData(imageData, 0, 0);
+  		t._ctx.putImageData(imgData, 0, 0);
 	}
 
 	draw() {
@@ -51,14 +51,20 @@ export class File extends Group {
 		if(!t._beforeDraw())
             return;
 
-		t.game.ctx.drawImage(t._image, t.x - t.width * t.origin[0], t.y - t.height * t.origin[1], t.width, t.height);
-
-		t._afterDraw();
+		t.game.ctx.drawImage(t._img, t.x, t.y, t.width, t.height);
 
 		for(let item of t.items) {
-            t._beforeDraw()
             item.draw();
-            t._afterDraw();
         }
+	}
+
+	show() {
+		this.active = 1;
+		this.emit('show');
+	}
+
+	hide() {
+		this.emit('hide');
+		this.active = 0;
 	}
 }

@@ -44,5 +44,3 @@ export function decode2d(encoded) {
         //split array into columns
         return Array.from({ length: Math.ceil(arr1d.length / arrWidth) }, (val, i) => arr1d.slice(i * arrWidth, i * arrWidth + arrWidth));
 }
-
-export default decode;

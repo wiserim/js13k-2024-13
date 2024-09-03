@@ -41,5 +41,3 @@ export function encode2d(arr) {
     return arrWidth + encode(arr.flat());
 
 }
-
-export default encode;

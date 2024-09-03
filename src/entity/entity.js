@@ -1,11 +1,18 @@
+import {TransformMatrix} from '../utils/transform-matrix';
 /*
  *	Entity class
  *	@class
  */
 export class Entity {
-    scale = [1,1];
-    origin = [.5,.5];
+    x = 0;
+    y = 0;
+    width = 0;
+    height = 0;
+    scale = {x: 1, y: 1};
+    origin = {x: .5, y: .5};
     angle = 0;
+    matrix = new TransformMatrix();
+    background = 0;
     alpha = 1;
     active = 1;
     interactive = 1;
@@ -21,75 +28,43 @@ export class Entity {
 	 * @param {number} width
 	 * @param {number} height
 	*/
-	constructor(args) {
+	constructor(args = {}) {
         let t = this;
-        t.x = args.x ?? 0;
-        t.y = args.y ?? 0;
-        t.width = args.width ?? 0;
-        t.height = args.height ?? 0;
-        t.background = args.background ?? 0;
+        Object.assign(t, args);
+        t.updateTransform();
     }
 
-    _drawTransform() {
-        let t = this,
-            matrix = [1,0,0,1,0,0],
-            rad = t.angle * Math.PI / 180,
-            x = t.x + t.width * t.origin[0],
-            y = t.y + t.height * t.origin[1];
+    updateTransform() {
+        let t = this;
+        t.matrix.reset();
 
-        //translate
-        matrix[4] += matrix[0] * x + matrix[2] * y;
-        matrix[5] += matrix[1] * x + matrix[3] * y;
-        //scale
-        matrix[0] *= t.scale.x;
-        matrix[1] *= t.scale.x;
-        matrix[2] *= t.scale.y;
-        matrix[3] *= t.scale.y;
-        //rotate
-        let cos = Math.cos(rad),
-        sin = Math.sin(rad),
-        m11 = matrix[0] * cos + matrix[2] * sin,
-        m12 = matrix[1] * cos + matrix[3] * sin,
-        m21 = -matrix[0] * sin + matrix[2] * cos,
-        m22 = -matrix[1] * sin + matrix[3] * cos
+        if(t.parent) {
+            t.matrix.multiply(t.parent.matrix.m);
+            t.matrix.translate(t.parent.x, t.parent.y);
+        }
 
-        matrix[0] = m11;
-        matrix[1] = m12;
-        matrix[2] = m21;
-        matrix[3] = m22;
-
-        t.game.ctx.transform(matrix[0],matrix[1],matrix[2],matrix[3],matrix[4],matrix[5]);
-        t.game.ctx.globalAlpha = t.alpha;
-
-        /*
-        let t = this,
-            r = t.angle * Math.PI / 180,
-            x = -t.width * t.origin[0],
-            y = -t.height * t.origin[1],
-            scale = 1,
-            xx=Math.cos(r)*scale,
-            xy=Math.sin(r)*scale;
-
-        t.game.ctx.setTransform(xx,xy,-xy,xx,x,y);
-        t.game.ctx.globalAlpha = t.alpha;
-        */
+        t.matrix
+            .rotate(t.angle)
+            .translate(-t.width * t.origin.x, -t.height * t.origin.y)
+            .scale(t.scale.x, t.scale.y);
     }
 
     update() {
         let t = this,
-            m =game.mouse;
+            m = game.mouse;
             
         if(!t.active)
             return;
 
-        if(t.interactive && t.contain(m.x, m.y)) {
+        t.updateTransform();
+
+        if((!t.parent || t.parent.interactive) && t.interactive && t.contain(m.x, m.y)) {
             t.emit('hover');
 
             if(m.down) {
                 t.emit('click');
             }
         }
-
     }
 
     _beforeDraw() {
@@ -98,21 +73,10 @@ export class Entity {
         if(!t.active || !t.alpha)
             return 0;
 
-        if(!t.parent)
-            t.game.ctx.save();
-
-        t._drawTransform();
+        t.game.ctx.setTransform(...t.matrix.m);
+        t.game.ctx.globalAlpha = t.alpha;
 
         return 1;
-    }
-
-    _afterDraw() {
-        if(this.parent) 
-            return;
-            this.game.ctx.restore();
-
-        this.game.ctx.strokeStyle = '#f00';
-        this.game.ctx.strokeRect(this.x - this.width * this.origin[0], this.y - this.height * this.origin[1], this.width, this.height);
     }
 
     draw() {
@@ -120,12 +84,12 @@ export class Entity {
         
         if(!t._beforeDraw())
             return;
-
-        t.game.ctx.beginPath();
-        t.game.ctx.fillStyle = t.background ?? '#00000000';
-        t.game.ctx.fillRect(-t.width * t.origin[0], -t.height * t.origin[1], t.width, t.height);
         
-        t._afterDraw();
+        //t.game.ctx.beginPath();
+        if(t.background) {
+            t.game.ctx.fillStyle = t.background;
+            t.game.ctx.fillRect(t.x, t.y, t.width, t.height);
+        }
     }
 
     /**
@@ -137,25 +101,8 @@ export class Entity {
      */
     contain(x, y) {
         let t = this,
-        px = 0,
-        py = 0;
-
-        if(t.parent) {
-            px =  t.parent.x - t.parent.width * t.parent.origin[0],
-            py =  t.parent.y - t.parent.height * t.parent.origin[1];
-        }
-        
-        return (t.x + px <= x &&
-            (t.x + px + t.width) >= x &&
-            t.y + py <= y &&
-            (t.y + py + t.height) >= y);
-        /*
-        
-        return (t.x - t.width * t.origin[0] + px <= x &&
-            (t.x - t.width * t.origin[0] + px + t.width) >= x &&
-            t.y - t.height * t.origin[1] + py <= y &&
-            (t.y - t.height * t.origin[1] + py + t.height) >= y);
-        */
+            p = t.matrix.reverseTransform(x, y);
+        return(p.x > t.x && p.x < t.x + t.width && p.y > t.y && p.y < t.y + t.height);
     }
 
     /**

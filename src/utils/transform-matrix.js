@@ -1,4 +1,4 @@
-export class TranformMatrix {
+export class TransformMatrix {
 	m = [1,0,0,1,0,0];
 
 	reset() {

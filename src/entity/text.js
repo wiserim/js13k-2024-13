@@ -2,17 +2,17 @@ import {Entity} from './entity';
 import {letters} from '../letters';
 
 export class Text extends Entity {
+    color = '#000';
+    size = 1;
+    lineMargin = 2;
+    padding = {x: 0, y: 0};
     _text = [''];
 
-	constructor(args) {
-		super(args);
-        let t = this;
-        t.color = args.color ?? '#000';
-        t.size = args.size ?? 1;
-        t.lineMargin = args.lineMargin ?? 2;
-        t.padding = args.padding ?? [0, 0];
-        t.text = args.text ?? '';
-	}
+    constructor(args) {
+        super(args);
+
+        Object.assign(this, args);
+    }
 
 	set text(text) {
 		let t = this,
@@ -47,8 +47,8 @@ export class Text extends Entity {
             t._text[i] = line;
         }
 
-        t.width = maxLength * t.size + t.padding[0] * 2;
-        t.height = (t._text.length * (6 + t.lineMargin) - 1 * t.size) * t.size - t.lineMargin + t.padding[1] * 2;
+        t.width = maxLength * t.size + t.padding.x * 2;
+        t.height = (t._text.length * (6 + t.lineMargin) - 1 * t.size) - t.lineMargin + t.padding.y * 2;
 	}
 
 	get text() {
@@ -58,26 +58,25 @@ export class Text extends Entity {
     draw() {
         let t = this,
             needed = [],
-            pX = t.x - t.width * t.origin[0],
-            pY = t.y - t.height * t.origin[1];
+            pX = t.x,
+            pY = t.y;
         
         if(!t._beforeDraw())
             return;
         
         if(t.background) {
             t.game.ctx.fillStyle = t.background;
-            //t.game.ctx.fillRect(pX, pY, t.width, t.height);
-            t.game.ctx.fillRect(t.x - t.width * t.origin[0], t.y - t.height * t.origin[1], t.width, t.height);
+            t.game.ctx.fillRect(t.x, t.y, t.width, t.height);
         }
 
         t.game.ctx.fillStyle = t.color;        
 
         for(let i in t._text) {
-            let curX = t.padding[0];
+            let curX = t.padding.x;
 
             for(let j in t._text[i]) {
                 let letter = t._text[i][j],
-                    curY = t.padding[1],
+                    curY = t.padding.y,
                     addX = 0;
 
                 for (let y in letter) {
@@ -94,8 +93,5 @@ export class Text extends Entity {
 
             pY += t.size * 6 + t.lineMargin;
         }
-
-        //t.game.ctx.restore();
-        t._afterDraw();
     }
 }

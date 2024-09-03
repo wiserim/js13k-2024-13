@@ -1,4 +1,4 @@
-import {decode2d} from './codec/array/decoder';
+import {decode2d} from './utils/decoder';
 
 const letters = {
 	"0": "32l9kqda",

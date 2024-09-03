@@ -2,16 +2,18 @@ let game = {
     time: 0,
 	delta: 1/60000, // 1/60s in ms
     deltaT: 0,
-    width: c.width,
-    height: c.height,
-    ctx: c.getContext('2d'),
+    width: c1.width,
+    height: c1.height,
+    canvas: c1,
+    ctx: c1.getContext('2d'),
     scenes: {},
-    paused: false,
+    //paused: false,
     mouse: {
         x: 0,
         y: 0,
         down: 0
     },
+    data: {},
 
 	init: () => {
         let t = game;
@@ -21,23 +23,18 @@ let game = {
         t.ctx.imageSmoothingEnabled = false;
         
         //mouse events
-        c.addEventListener('mousedown', (e) => {
-            let box = c.getBoundingClientRect();    
+        c1.addEventListener('mousedown', (e) => {
+            let box = c1.getBoundingClientRect();    
             t.mouse.x = (e.pageX - box.x) / box.width * 320;
             t.mouse.y = (e.pageY - box.y) / box.height * 240;
             t.mouse.down = 1;
         });
 
-        c.addEventListener('mousemove', (e) => {
-            let box = c.getBoundingClientRect();
+        c1.addEventListener('mousemove', (e) => {
+            let box = c1.getBoundingClientRect();
             t.mouse.x = (e.pageX - box.x) / box.width * 320;
             t.mouse.y = (e.pageY - box.y) / box.height * 240;
         });
-        /*
-        window.addEventListener('resize', function(args) {
-            t.rescale();
-        }, false);
-        */
 
         t.time = performance.now();
 
@@ -54,6 +51,7 @@ let game = {
         let t = this;
         //frame
         let dt = performance.now() - t.time;
+        t.cursor('default');
         
         if(dt < t.delta || t.paused) {
             requestAnimationFrame(t.update.bind(t));
@@ -73,33 +71,12 @@ let game = {
         t.mouse.down = 0;
         requestAnimationFrame(t.update.bind(t));
     },
-    /*
-    getPixelRatio() {
-        let t = this,
-        dpr = window.devicePixelRatio || 1,
-        bsr = t.ctx.webkitBackingStorePixelRatio ||
-        t.ctx.mozBackingStorePixelRatio ||
-        t.ctx.msBackingStorePixelRatio ||
-        t.ctx.oBackingStorePixelRatio ||
-        t.ctx.backingStorePixelRatio || 1;
 
-          return dpr / bsr;
-    },
-
-    rescale() {
-      let t = this,
-      pixelRatio = t.getPixelRatio(),
-      width = c.width * pixelRatio,
-      height = c.height * pixelRatio;
-
-      if(width != t.ctx.canvas.width)
-        t.ctx.canvas.width = width;
-      if (height != t.ctx.canvas.height)
-        t.ctx.canvas.height = height;
-
-      t.ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    cursor(cursor) {
+        this.canvas.style.cursor = cursor;
     }
-    */
 }
+
+window.game = game;
 
 export default game;
