@@ -1,3 +1,5 @@
+import {letters} from './letters';
+
 let game = {
     time: 0,
 	delta: 1/60000, // 1/60s in ms
@@ -5,8 +7,10 @@ let game = {
     width: c1.width,
     height: c1.height,
     canvas: c1,
+    letters: letters,
     ctx: c1.getContext('2d'),
-    scenes: {},
+    assets: {}, 
+    scenes: [],
     //paused: false,
     mouse: {
         x: 0,

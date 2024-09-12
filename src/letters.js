@@ -1,4 +1,5 @@
-import {decode2d} from './utils/decoder';
+//import {decode2d} from './utils/decoder';
+//import {encode2d} from './utils/encoder';
 
 const letters = {
 	"0": "32l9kqda",
@@ -43,11 +44,9 @@ const letters = {
 	"?": "32l5j5ap",
 	",": "22alb9",
 	"'": "22j5al",
-	"-": "32ald9al"
+	"-": "32ald9al",
+	":": "22b5ap",
+	"/": "32b5j6b5"
 };
-
-for(let key in letters) {
-	letters[key] = decode2d(letters[key]);
-}
 
 export { letters };

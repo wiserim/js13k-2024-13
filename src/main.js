@@ -1,5 +1,6 @@
 import game from './game';
-import {init} from './init';
+import {init} from './action/init';
+
 
 init();
 game.init();

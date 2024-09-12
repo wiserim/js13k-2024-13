@@ -1,10 +1,17 @@
 import {Entity} from './entity';
+import {createCanvas} from '../utils/create-canvas';
+import {rand} from '../utils/rand';
+import {personData} from '../person-data';
+import {grain} from '../utils/grain';
 
 export class Person extends Entity {
 	name = '';
 	info = [];
 	bio = [];
-	portraitHash;
+	portraitData = [];
+	clues = [];
+	arrested = 0;
+	protected = 0;
 	alive = 1;
 
 	constructor(args) {
@@ -12,13 +19,9 @@ export class Person extends Entity {
         let t = this;
         t.width = 32;
         t.height = 32;
-		t.portrait = document.createElement('canvas');
-		t.portrait.width = 128;
-		t.portrait.height = 128;
-        t._ctx = t.portrait.getContext('2d');
-        t._ctx.translate(0.5, 0.5);
-		t._ctx.lineWidth = 1;
-        t._ctx.imageSmoothingEnabled = false;
+        let c = createCanvas(72, 72);
+        t.image = c.canvas;
+        t._ctx = c.ctx;
 
         Object.assign(t, args);
 
@@ -27,30 +30,120 @@ export class Person extends Entity {
         	t.alpha = .8;
         	t.game.cursor('pointer');
         });
-
-        t.on('click', () => {
-        	console.log('click')
-        });
-	}
-
-	generatePortrait() {
-		let t = this;
-        t._ctx.clearRect(0, 0, 128, 128);
-        t._ctx.fillStyle = '#fff';
-        t._ctx.fillRect(0,0,128,128);
-        let p = new Path2D("M0 128 L 40 108 L 20 88 L 20 58 L 40 38 L 88 38 L 108 58 L 108 88 L 88 108 L 128 128 Z");
-        t._ctx.fillStyle = '#666';
-        t._ctx.fill(p);
-	}
+    }
 
 	draw() {
 		let t = this;
-
 		if(!t._beforeDraw())
             return;
 
-		t.game.ctx.drawImage(t.portrait, t.x, t.y, t.width, t.height);
+		t.game.ctx.drawImage(t.image, t.x, t.y, t.width, t.height);
+		
+		//if not alive cross portrait
+		if(!t.alive) {
+			t.game.ctx.beginPath();
+			t.game.ctx.lineWidth = 3;
+			t.game.ctx.lineCap = 'round';
+			t.game.ctx.strokeStyle = '#c44';
+			t.game.ctx.stroke(new Path2D(`
+				M ${t.x + 3} ${t.y + 3} Q ${t.x + 16} ${t.y + 12} ${t.x + 29} ${t.y + 29}
+				M ${t.x + 3} ${t.y + 29} Q ${t.x + 12} ${t.y + 16} ${t.x + 29} ${t.y + 3}
+			`));
+		}
 
 		t.alpha = 1;
 	}
+
+	generateImage() {
+		let t = this,
+			pd = t.portraitData,
+			p = personData;
+
+        t._ctx.clearRect(0, 0, 72, 72);
+        t._ctx.fillStyle = '#fff';
+        t._ctx.fillRect(0,0,72,72);
+        /*
+        let p = new Path2D(`
+		M 0 72 L 0 60 L 25 55 L 20 50 L 17 45 L 17 25 L 20 20 L 25 15 L 30 13
+		L 42 13 L 47 15 L 52 20 L 55 25 L 55 45 L 52 50 L 45 55 L 72 60 L 72 72
+		Z`);
+		*/
+		//draw silhuette
+        t._ctx.fillStyle = '#a8a8b8';
+        t._ctx.fill(new Path2D(p.silhuette));
+
+        if(!pd.length) {
+        	return;
+        }
+
+        //draw eyes
+        t._ctx.fillStyle = '#fff';
+        let eyesCoords = [
+        	[26, 32, 5, 3],
+			[25, 33, 1, 1],
+			[31, 33, 1, 1],
+
+			[42, 32, 5, 3],
+			[41, 33, 1, 1],
+			[47, 33, 1, 1]
+        ],
+        irisCoords = [
+        	[28, 32, 2, 1],
+        	[27, 33, 3, 2],
+        	[44, 32, 2, 1],
+        	[43, 33, 3, 2]
+        ];
+        for(let i in eyesCoords) {
+        	t._ctx.fillRect(...eyesCoords[i]);
+        }
+        t._ctx.fillStyle = p.eyes[pd[1]][0];
+
+        for(let i in irisCoords) {
+        	t._ctx.fillRect(...irisCoords[i]);
+        }
+
+        //hair
+        t._ctx.fillStyle = p.hairColor[pd[3]][0];
+        t._ctx.fill(new Path2D(p.hair[pd[0]][pd[2]][0]));
+
+        //draw nose
+        t._ctx.strokeStyle = '#0006';
+        t._ctx.stroke(new Path2D(p.nose[pd[4]][0]));
+        //draw lips
+        t._ctx.fillStyle = '#0006';
+        t._ctx.fill(new Path2D(p.lips[0][0]));
+        
+        //draw clothes
+        t._ctx.fillStyle = p.clothesColor[pd[6]][0];
+        t._ctx.strokeStyle = pd[6] ? '#000' : '#fff6';
+        t._ctx.fill(new Path2D(p.clothes[pd[5]][0]));
+        t._ctx.stroke(new Path2D(p.clothes[pd[5]][1]));
+        grain(t._ctx);
+	}
+
+	generate() {
+		let t = this,
+		p = personData,
+		pd = [];
+
+		//sex (0 - male, 1 - female)
+		pd.push(rand(0, 1));
+		//name
+		t.name = `${p.firstName[pd[0]][rand(0, p.firstName[pd[0]].length - 1)]} ${p.lastName[rand(0, p.lastName.length - 1)]}`;
+		//eye color
+		pd.push(rand(0, p.eyes.length - 1));
+		//hair
+		pd.push(rand(0, p.hair[pd[0]].length - 1));
+		//hair color
+		pd.push(rand(0, p.hairColor.length - 1));
+		//nose
+		pd.push(rand(0, p.nose.length - 1));
+		//clothes
+		pd.push(rand(0, p.clothes.length - 1));
+		//clothes color
+		pd.push(rand(0, p.clothesColor.length - 1));
+
+		t.portraitData = pd;
+	}
+	
 }

@@ -14,7 +14,7 @@ export default defineConfig({
 		})
 	],
 	build: {
-		outDir: "./dist",
+		outDir: "./tmp",
 		target: "esnext",
 		minify: "terser",
 		cssCodeSplit: false,
@@ -22,7 +22,7 @@ export default defineConfig({
 			keep_classnames: false,
 			keep_fnames: false,
 			mangle:{
-				properties: true,
+				properties: false,
 				toplevel: true
 			}
 		},

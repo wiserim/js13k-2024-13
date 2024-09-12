@@ -1,5 +1,5 @@
 import {Entity} from './entity';
-import {letters} from '../letters';
+//import {letters} from '../letters';
 
 export class Text extends Entity {
     color = '#000';
@@ -28,6 +28,10 @@ export class Text extends Entity {
             }
         }
 
+        if(!t.padding) {
+            t.padding = {x: 0, y: 0};
+        }
+
         //calculate text dimensions
         for(let i in t._text) {
             let line = [],
@@ -35,7 +39,7 @@ export class Text extends Entity {
 
             for(let j in t._text[i]) {
             	//if letter found
-                let letter = letters[t._text[i].charAt(j)];
+                let letter = game.letters[t._text[i].charAt(j)];
                 if(letter) {
                     line.push(letter);
                     length += letter[0].length;
@@ -69,7 +73,7 @@ export class Text extends Entity {
             t.game.ctx.fillRect(t.x, t.y, t.width, t.height);
         }
 
-        t.game.ctx.fillStyle = t.color;        
+        t.game.ctx.fillStyle = t.color;
 
         for(let i in t._text) {
             let curX = t.padding.x;

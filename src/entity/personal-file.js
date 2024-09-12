@@ -7,12 +7,13 @@ export class PersonalFile extends File {
 	constructor(args) {
 		super(args);
 		let t = this;
-		t.personName = new Text({x: 120, y: 40, origin: {x: 0, y: 0 }, size: 2 });
-		t.personInfo = new Text({x: 120, y: 60, origin: {x: 0, y: 0 }});
-		t.personBio = new Text({x: 30, y: 122, origin: {x: 0, y: 0 }});
+		
+		t.personName = new Text({x: 100, y: 28, origin: {x: 0, y: 0 }, size: 2 });
+		t.personBio = new Text({x: 100, y: 46, origin: {x: 0, y: 0 }});
+		t.personInfo = new Text({x: 20, y: 110, origin: {x: 0, y: 0 }});
 		t.closeBtn = new Text({x: 280, y: 220, origin: {x: 1, y: .5}, padding: { x: 3, y: 3 }, text: 'close', color: '#fff', background: '#000'});
 
-		t.closeBtn.on('hover', () => {t.closeBtn.alpha = .8; t.game.cursor('pointer');});
+		t.closeBtn.on('hover', () => {t.game.cursor('pointer');});
 		t.closeBtn.on('click', () => {t.hide();});
 
 		t.add(t.personName);
@@ -42,7 +43,7 @@ export class PersonalFile extends File {
             return;
 
 		t.game.ctx.drawImage(t._img, t.x, t.y, t.width, t.height);
-		t.game.ctx.drawImage(t.person.portrait, t.x + 20, t.y + 28, 72, 72);
+		t.game.ctx.drawImage(t.person.image, t.x + 20, t.y + 28, 72, 72);
 
 		for(let item of t.items) {
             item.draw();
