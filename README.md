@@ -2,7 +2,7 @@
 Entry for js13kGames 2024 (theme: Triskaidekaphobia).
 
 ## Links
-* js13kGames 2024 entry: https://js13kgames.com/2024/games/thirteen
+* js13kGames 2024 entry: https://dev.js13kgames.com/2024/games/thirteen
 
 ## Description
 On September 13, 2024 a body of a homicide victim was found. Crime scene analysis suggests odd similarities to series of 13 murders commited 13 years ago by unidentified serial killer (see case no. 20110913/013). We don't know if we're dealing with the same killer, copycat or it's just a coincidence. What we know is that killer won't stop on only one victim.
