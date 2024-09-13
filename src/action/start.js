@@ -72,6 +72,7 @@ export function start() {
 		'Victim: Joe Doe',
 		'Culprit: unknown'
 	];
+	/*
 	killer.info = [
 		'On September 13, 2024 a body was found of a homicide victim.',
 		'The victim was killed in a similar way to the method used in',
@@ -82,6 +83,19 @@ export function start() {
 		`We\'ve also found ${game.data.victim.clues[rand(0,game.data.victim.clues.length - 1)]} on a crime scene.`,
 		'It may be a clue about the next victim.'
 	];
+	*/
+	killer.info = [
+		'On September 13, 2024 a body of a homicide victim was found.',
+		'Crime scene analysis suggests odd similarities to series',
+		'of 13 murders commited 13 years ago by unidentified',
+		'serial killer: see case no. 20110913/013.',
+		'We don\'t know if we\'re dealing with the same killer, copycat',
+		'or it\'s just a coincidence.',
+		'What we know is that killer won\'t stop on only one victim.',
+		`We\'ve found ${game.data.victim.clues[rand(0,game.data.victim.clues.length - 1)]} on a crime scene.`,
+		'It may be a clue about the next victim.'
+	];
+
 
 	game.scenes.killerFile.person = killer;
 	game.scenes.summary.person = killer;
