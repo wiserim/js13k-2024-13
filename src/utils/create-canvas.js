@@ -2,9 +2,9 @@
  * @function
  * @name createCanvas
  * 
- * Generate a random grain on canvas
+ * Creates canvas element and it's 2d context
  * 
- * @param {object} ctx - Canvas 2D context
+ * @return {Object} Pair {canvas, ctx}
  */
 export function createCanvas(width, height) {
 	let c = document.createElement('canvas'),

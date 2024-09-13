@@ -3,6 +3,12 @@ import {shuffle} from '../utils/shuffle';
 import {personData} from '../person-data';
 import {play} from '../utils/music';
 
+/**
+ * @function
+ * @name start
+ * 
+ * Starts new game
+ */
 export function start() {
 	for(let scene of game.scenes) {
 		scene.active = 0;
@@ -72,18 +78,6 @@ export function start() {
 		'Victim: Joe Doe',
 		'Culprit: unknown'
 	];
-	/*
-	killer.info = [
-		'On September 13, 2024 a body was found of a homicide victim.',
-		'The victim was killed in a similar way to the method used in',
-		'a series of murders commited 13 years ago by unidentified',
-		'serial killer: see case no. 20110913/013.',
-		'We don\'t know if they\'re commited by the same person, copycat',
-		'or it\'s just a coincidence.',
-		`We\'ve also found ${game.data.victim.clues[rand(0,game.data.victim.clues.length - 1)]} on a crime scene.`,
-		'It may be a clue about the next victim.'
-	];
-	*/
 	killer.info = [
 		'On September 13, 2024 a body of a homicide victim was found.',
 		'Crime scene analysis suggests odd similarities to series',

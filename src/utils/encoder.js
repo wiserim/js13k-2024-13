@@ -1,4 +1,7 @@
 /*
+ * @function
+ * @name encode
+ * 
  * Encode array of integers to string.
  * Array values must be natural numbers (>= 0). 
  * 
@@ -28,6 +31,9 @@ export function encode(arr) {
 }
 
 /*
+ * @function
+ * @name encode2d
+ * 
  * Encode two dimensional array of integers to string.
  * Array values must be natural numbers (>= 0).
  * Max. array width: 35

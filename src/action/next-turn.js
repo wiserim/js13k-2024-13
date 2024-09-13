@@ -2,6 +2,12 @@ import {rand} from '../utils/rand';
 import {shuffle} from '../utils/shuffle';
 import {personData} from '../person-data';
 
+/**
+ * @function
+ * @name nextTurn
+ * 
+ * Update game and start next turn
+ */
 export function nextTurn() {
 	game.scenes.board.interactive = 0;
 	game.data.turn++;
@@ -12,27 +18,8 @@ export function nextTurn() {
 	killer.name = `Case no. 20240913/00${game.data.turn}`;
 	killer.bio[0] = `Date: 09/${(13 + game.data.turn)}/2024`;
 	killer.bio[2] = `Victim: ${game.data.victim.name}`;
-	/*
-	  [
-		`Date: 09/13/2024`,
-		'Type: Homicide',
-		'Victim: Joe Doe',
-		'Culprit: unknown'
-	];
-	*/
+
 	killer.info = [];
-	/*
-	[
-		'On September 13, 2024 a body was found of a homicide victim.',
-		'The victim was killed in a similar way to the method used in',
-		'a series of murders commited 13 years ago by unidentified',
-		'serial killer: see case no. 20110913/013.',
-		'We don\'t know if they\'re commited by the same person, copycat',
-		'or it\'s just a coincidence.',
-		`We\'ve also found ${game.data.victim.clues[rand(0,game.data.victim.clues.length - 1)]} on a crime scene.`,
-		'It may be a clue about the next victim.'
-	];
-	*/
 
 	if(game.data.victim.protected) {
 		crimeType = 'Attempted homicide';
@@ -66,7 +53,7 @@ export function nextTurn() {
 			`- Victims: ${game.data.victimCount}`,
 			`- Prevented murders: ${game.data.turn - game.data.victimCount}`,
 			'',
-			'Case suspended'
+			'Case closed'
 		]);
 
 		game.scenes.summary.person = killer;
@@ -80,11 +67,11 @@ export function nextTurn() {
 			'the serial killer.',
 			'',
 			'Summary:',
-			`- Investigation time: ${game.data.turn} days,`,
+			`- Investigation time: ${game.data.turn} days`,
 			`- Victims: ${game.data.victimCount}`,
 			`- Prevented murders: ${game.data.turn - game.data.victimCount}`,
 			'',
-			'Case closed'
+			'Case suspended'
 		]);
 		game.scenes.summary.person = killer;
 		game.scenes.summary.show();

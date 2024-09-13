@@ -2,9 +2,20 @@ import {File} from './file';
 import {Text} from './text';
 import {personData} from '../person-data';
 
+/*
+ *	PersonalFile class
+ *	@class
+ *	@extends File
+ */
 export class PersonalFile extends File {
 	_person;
 
+	/*
+	 * PersonalFile constructor
+	 * @constructor
+	 * 
+	 * @param {Object} [person]
+	*/
 	constructor(args) {
 		super(args);
 		let t = this;
@@ -36,11 +47,19 @@ export class PersonalFile extends File {
 		t.personBio.text = person.bio;
 
 		if(pd.length) {
+			let hair = `- ${p.hairColor[pd[3]][1]}, ${p.hair[pd[0]][pd[2]][1]},`;
+			if(pd[0] == 0 && pd[2] == 2) {
+				hair = `- ${p.hair[pd[0]][pd[2]][1]},`;
+			}
+			else if(pd[0] == 1 && pd[2] == 2) {
+				hair = `- ${p.hairColor[pd[3]][1]} hair with ${p.hair[pd[0]][pd[2]][1]},`;
+			}
+
 			info = info.concat([
 				'',
 				'Appearance:',
 				`- ${p.eyes[pd[1]][1]} eyes,`,
-				(pd[0] == 0 && pd[2] == 2 ? `- ${p.hair[pd[0]][pd[2]][1]},` : `- ${p.hairColor[pd[3]][1]}, ${p.hair[pd[0]][pd[2]][1]},`),
+				hair,
 				`- ${p.nose[pd[4]][1]} nose,`,
 				`- wears a ${p.clothesColor[pd[6]][1]} ${p.clothes[pd[5]][2]}.`,
 			]);
@@ -53,6 +72,9 @@ export class PersonalFile extends File {
 		return this._person;
 	}
 
+	/**
+     * Draw personal file and it's children
+     */
 	draw() {
 		let t = this;
 

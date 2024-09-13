@@ -1,6 +1,10 @@
 import {Entity} from './entity';
-//import {letters} from '../letters';
 
+/*
+ *  Text class
+ *  @class
+ *  @extends entity
+ */
 export class Text extends Entity {
     color = '#000';
     size = 1;
@@ -8,12 +12,33 @@ export class Text extends Entity {
     padding = {x: 0, y: 0};
     _text = [''];
 
+    /*
+     * Text constructor
+     * @constructor
+     * 
+     * @param {number} [x] X coordinate
+     * @param {number} [y] Y coordinate
+     * @param {number} [width]
+     * @param {number} [height]
+     * @param {Object} [scale] Scale
+     * @param {Object} [origin] Object's origin point in relation to it's coordinates
+     * @param {number} [angle] Object's angle
+     * @param {string} [background] Object's background color
+     * @param {number} [alpha] Object's alpha (opacity)
+     * @param {boolean} [active] Determines if object is active
+     * @param {boolean} [interactive] Determines if object is interactive
+     * @param {string} [color] Text color
+     * @param {Array|string} [text] Object's text. If passed as array, each row is treated as new line of text
+     * @param {Number} [size] Text size (multiply text size by 5)
+     * @param {Object} [padding] Text padding from edge. Visible when background color is set
+     * 
+    */
     constructor(args) {
         super(args);
 
         Object.assign(this, args);
     }
-
+    
 	set text(text) {
 		let t = this,
 			maxLength = 0;
@@ -59,6 +84,9 @@ export class Text extends Entity {
 		return this._text;
 	}
 
+    /**
+     * Draw text
+     */
     draw() {
         let t = this,
             needed = [],

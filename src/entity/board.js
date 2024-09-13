@@ -2,12 +2,26 @@ import {Group} from './group';
 import {Person} from './person';
 import {Text} from './text';
 import {grain} from '../utils/grain';
+import {createCanvas} from '../utils/create-canvas';
 import {nextTurn} from '../action/next-turn';
 
+/*
+ *	Board class
+ *	@class
+ *	@extends Group
+ */
 export class Board extends Group {
+	/*
+	 * Board constructor
+	 * @constructor
+	 * 
+     * @param {boolean} [active] Determines if object is active
+     * @param {boolean} [interactive] Determines if object is interactive
+	*/
 	constructor() {
 		super({x: 160, y: 120, width: 320, height: 240 });
 		let t = this,
+			c = createCanvas(t.width, t.height),
 			nextTurnBtn = new Text({
 				x: 160,
 				y: 235,
@@ -17,14 +31,9 @@ export class Board extends Group {
 				color: '#fff',
 				background: '#000'
 			});
-		
-		t._img = document.createElement('canvas');
-		t._img.width = t.width;
-		t._img.height = t.height;
-        t._ctx = t._img.getContext('2d');
-        t._ctx.translate(0.5, 0.5);
-		t._ctx.lineWidth = 1;
-        t._ctx.imageSmoothingEnabled = false;
+
+		t._img = c.canvas;
+        t._ctx = c.ctx;
 
         t._generateImage();
 
@@ -34,6 +43,14 @@ export class Board extends Group {
         t.add(nextTurnBtn);
 	}
 
+	/**
+     * Generate image
+	 * 
+	 * @private
+     *
+     * @param {string} event Event name
+     * @param {Object[]} args Array of arguments passed to listener
+     */
 	_generateImage() {
 		let t = this;
         t._ctx.clearRect(0, 0, t.width, t.height);
@@ -51,6 +68,9 @@ export class Board extends Group {
         grain(t._ctx);
 	}
 
+	/**
+     * Draw board and it's children
+     */
 	draw() {
 		let t = this;
 

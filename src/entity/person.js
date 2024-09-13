@@ -4,6 +4,11 @@ import {rand} from '../utils/rand';
 import {personData} from '../person-data';
 import {grain} from '../utils/grain';
 
+/*
+ *	Person class
+ *	@class
+ *	@extends Entity
+ */
 export class Person extends Entity {
 	name = '';
 	info = [];
@@ -14,17 +19,37 @@ export class Person extends Entity {
 	protected = 0;
 	alive = 1;
 
+	/*
+	 * Person constructor
+	 * @constructor
+	 * 
+	 * @param {number} [x] X coordinate
+	 * @param {number} [y] Y coordinate
+     * @param {Object} [scale] Scale
+     * @param {Object} [origin] Object's origin point in relation to it's coordinates
+     * @param {number} [angle] Object's angle
+     * @param {string} [background] Object's background color
+     * @param {number} [alpha] Object's alpha (opacity)
+     * @param {boolean} [active] Determines if object is active
+     * @param {boolean} [interactive] Determines if object is interactive
+	 * @param {string} name Person's name
+	 * @param {string} info Person's information displayed in lower section of PersonalFile class
+	 * @param {string} bio Person's information displayed next to portrait by PersonalFile class
+	 * @param {Array} portraitData Person's portrait data as keys to parameters in personData object
+	 * @param {Array} clues Clues about person
+	 * @param {boolean} arrested Determines if person is arrested
+	 * @param {boolean} protected Determines if person is protected
+	 * @param {boolean} alive Determines if person is alive
+	 * 
+	*/
 	constructor(args) {
 		super(args);
-        let t = this;
+        let t = this,
+        	c = createCanvas(72, 72);
         t.width = 36;
         t.height = 36;
-        let c = createCanvas(72, 72);
         t.image = c.canvas;
         t._ctx = c.ctx;
-        t._ctx.translate(0.5, 0.5);
-		t._ctx.lineWidth = 1;
-        t._ctx.imageSmoothingEnabled = false;
 
         Object.assign(t, args);
 
@@ -35,6 +60,9 @@ export class Person extends Entity {
         });
     }
 
+    /**
+     * Draw person
+     */
 	draw() {
 		let t = this;
 		if(!t._beforeDraw())
@@ -57,6 +85,9 @@ export class Person extends Entity {
 		t.alpha = 1;
 	}
 
+	/**
+     * Generate image
+     */
 	generateImage() {
 		let t = this,
 			pd = t.portraitData,
@@ -119,6 +150,9 @@ export class Person extends Entity {
         grain(t._ctx);
 	}
 
+	/**
+     * Generate person's data
+     */
 	generate() {
 		let t = this,
 		p = personData,

@@ -23,10 +23,18 @@ export class Entity {
 	 * Entity constructor
 	 * @constructor
 	 * 
-	 * @param {number} x X coordinate
-	 * @param {number} y Y coordinate
-	 * @param {number} width
-	 * @param {number} height
+	 * @param {number} [x] X coordinate
+	 * @param {number} [y] Y coordinate
+	 * @param {number} [width]
+	 * @param {number} [height]
+     * @param {Object} [scale] Scale
+     * @param {Object} [origin] Object's origin point in relation to it's coordinates
+     * @param {number} [angle] Object's angle
+     * @param {string} [background] Object's background color
+     * @param {number} [alpha] Object's alpha (opacity)
+     * @param {boolean} [active] Determines if object is active
+     * @param {boolean} [interactive] Determines if object is interactive
+     * 
 	*/
 	constructor(args = {}) {
         let t = this;
@@ -34,6 +42,9 @@ export class Entity {
         t.updateTransform();
     }
 
+    /**
+     * Update transformation according to parent
+     */
     updateTransform() {
         let t = this;
         t.matrix.reset();
@@ -49,6 +60,9 @@ export class Entity {
             .scale(t.scale.x, t.scale.y);
     }
 
+    /**
+     * Update entity
+     */
     update() {
         let t = this,
             m = game.mouse;
@@ -67,6 +81,11 @@ export class Entity {
         }
     }
 
+    /**
+     * Perform operations before draw
+     * 
+     * @private
+     */
     _beforeDraw() {
         let t = this;
 
@@ -79,13 +98,15 @@ export class Entity {
         return 1;
     }
 
+    /**
+     * Draw entity
+     */
     draw() {
         let t = this;
         
         if(!t._beforeDraw())
             return;
-        
-        //t.game.ctx.beginPath();
+
         if(t.background) {
             t.game.ctx.fillStyle = t.background;
             t.game.ctx.fillRect(t.x, t.y, t.width, t.height);
@@ -97,6 +118,7 @@ export class Entity {
      *
      * @param {number} x X coordinate
      * @param {number} y Y coordinate
+     * 
      * @return {boolean}
      */
     contain(x, y) {
@@ -110,7 +132,7 @@ export class Entity {
      *
      * @param {string} event Event name
      * @param {function} callback Callback function
-     * @param {object} [ctx=this]  The context used to call callback function
+     * 
      * @return {this}
      */
     on(event, callback) {
@@ -128,6 +150,7 @@ export class Entity {
      *
      * @param {string} event Event name
      * @param {Object[]} args Array of arguments passed to listener
+     * 
      * @return {this}
      */
     emit(event, args = []) {

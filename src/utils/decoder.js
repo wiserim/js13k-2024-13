@@ -1,4 +1,7 @@
 /*
+ * @function
+ * @name decode
+ * 
  * Decode encoded array.
  * 
  * @param {string} encoded
@@ -31,6 +34,9 @@ export function decode(encoded) {
 }
 
 /*
+ * @function
+ * @name decode2d
+ * 
  * Decode encoded array.
  * 
  * @param {string} encoded Encoded 2D array

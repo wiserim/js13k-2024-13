@@ -1,6 +1,6 @@
-//import {decode2d} from './utils/decoder';
-//import {encode2d} from './utils/encoder';
-
+/*
+* Encoded letters
+*/
 const letters = {
 	"0": "32l9kqda",
 	"1": "12la",

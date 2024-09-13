@@ -7,6 +7,12 @@ import {PersonalFile} from '../entity/personal-file';
 import {decode2d} from '../utils/decoder';
 import {start} from './start';
 
+/**
+ * @function
+ * @name init
+ * 
+ * Initializes game
+ */
 export function init() {
 	for(let key in game.letters) {
         game.letters[key] = decode2d(game.letters[key]);
@@ -72,7 +78,6 @@ export function init() {
 	arrestBtn.on('hover', () => game.cursor('pointer'));
 	arrestBtn.on('click', () => {
 		suspectFile.person.arrested = 1;
-		suspectFile.person.interactive = 0;
 		game.data.arrested = suspectFile.person;
 		suspectFile.hide();
 	});
@@ -81,7 +86,6 @@ export function init() {
 	protectBtn.on('hover', () => game.cursor('pointer'));
 	protectBtn.on('click', () => {
 		suspectFile.person.protected = 1;
-		suspectFile.person.interactive = 0;
 		game.data.protected = suspectFile.person;
 		suspectFile.hide();
 	});

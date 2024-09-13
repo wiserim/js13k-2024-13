@@ -1,6 +1,8 @@
 import {decode2d} from './utils/decoder';
-//https://lospec.com/palette-list/eighexplore
 
+/*
+* Personal data used to generate persons
+*/
 const personData = {
 	firstName: [
 		//male names

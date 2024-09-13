@@ -1,19 +1,32 @@
 import {Group} from './group';
 import {grain} from '../utils/grain';
+import {createCanvas} from '../utils/create-canvas';
 
+/*
+ *	File class
+ *	@class
+ *	@extends Group
+ */
 export class File extends Group {
+	/*
+	 * File constructor
+	 * @constructor
+	*/
 	constructor() {
 		super({x: 160, y: 123, width: 300, height: 234 });
-        let t = this;
-		t._img = document.createElement('canvas');
-		t._img.width = t.width;
-		t._img.height = t.height;
-        t._ctx = t._img.getContext('2d');
-        t._ctx.imageSmoothingEnabled = false;
+        let t = this,
+        c = createCanvas(t.width, t.height);
+		t._img = c.canvas;
+        t._ctx = c.ctx;
 
         t._generateImage();
 	}
 
+	/**
+     * Generate image
+	 * 
+	 * @private
+     */
 	_generateImage() {
 		let t = this;
         t._ctx.clearRect(0, 0, t.width, t.height);
@@ -36,6 +49,9 @@ export class File extends Group {
         grain(t._ctx);
 	}
 
+	/**
+     * Draw file and it's children
+     */
 	draw() {
 		let t = this;
 
@@ -49,11 +65,17 @@ export class File extends Group {
         }
 	}
 
+	/**
+     * Show file and set as active
+     */
 	show() {
 		this.active = 1;
 		this.emit('show');
 	}
 
+	/**
+     * Hide file and set as inactive
+     */
 	hide() {
 		this.emit('hide');
 		this.active = 0;
