@@ -32,13 +32,7 @@ export function nextTurn() {
 		`We\'ve also found ${game.data.victim.clues[rand(0,game.data.victim.clues.length - 1)]} on a crime scene.`,
 		'It may be a clue about the next victim.'
 	];
-	*/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-
-	//check if killer is arrested
-	if(game.data.killer.arrested) {
-		console.log('killer arrested');
-		return;
-	}
+	*/
 
 	if(game.data.victim.protected) {
 		crimeType = 'Attempted homicide';
@@ -46,24 +40,55 @@ export function nextTurn() {
 			`On September ${12 + game.data.turn}, 2024 unidentified perpetrator committed`,
 			`attempted murder of ${game.data.victim.name}.`,
 			'The attempt was prevented by officer deployed to protect victim.',
-			'Officer began pursuit after the suspect, which managed to escape.'
+			`Officer began pursuit after the suspect, which ${game.data.killer.arrested ? 'was arrested' : 'managed to escape'}.`
 		];
 	}
 	else {
 		game.data.victim.alive = 0;
 		game.data.victim.interactive = 0;
-		game.data.victimCount++;killer.info.push();
+		game.data.victimCount++;
 
 		killer.info = [
 			`On September ${12 + game.data.turn}, 2024 a body of another homicide victim was found.`,
 			'Crime scene analysys indicates that victim was killed by',
-			'the same person as previous ones.'
+			'the same serial killer as the previous one.'
 		];
 	}
 
-	if(game.data.turn > 13) {
-		console.log('game over');
-		game.scenes.menu.show();
+	//check if killer is arrested
+	if(game.data.killer.arrested) {
+		killer.bio[3] = `Culprit: ${game.data.killer.name}`;
+		killer.info = killer.info.concat([
+			`${game.data.killer.name} was arrested and charged with murder of ${game.data.victimCount} people.`,
+			'',
+			'Summary:',
+			`- Investigation time: ${game.data.turn} days,`,
+			`- Victims: ${game.data.victimCount}`,
+			`- Prevented murders: ${game.data.turn - game.data.victimCount}`,
+			'',
+			'Case suspended'
+		]);
+
+		game.scenes.summary.person = killer;
+		game.scenes.summary.show();
+		return;
+	}
+
+	if(game.data.turn > 12) {
+		killer.info = killer.info.concat([
+			'The investigation failed to determine the identity of',
+			'the serial killer.',
+			'',
+			'Summary:',
+			`- Investigation time: ${game.data.turn} days,`,
+			`- Victims: ${game.data.victimCount}`,
+			`- Prevented murders: ${game.data.turn - game.data.victimCount}`,
+			'',
+			'Case closed'
+		]);
+		game.scenes.summary.person = killer;
+		game.scenes.summary.show();
+		return;
 	}
 
 	game.data.victim = game.data.potentialVictims.pop();

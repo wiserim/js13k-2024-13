@@ -1,5 +1,6 @@
 import {File} from './file';
 import {Text} from './text';
+import {personData} from '../person-data';
 
 export class PersonalFile extends File {
 	_person;
@@ -11,7 +12,7 @@ export class PersonalFile extends File {
 		t.personName = new Text({x: 100, y: 28, origin: {x: 0, y: 0 }, size: 2 });
 		t.personBio = new Text({x: 100, y: 46, origin: {x: 0, y: 0 }});
 		t.personInfo = new Text({x: 20, y: 110, origin: {x: 0, y: 0 }});
-		t.closeBtn = new Text({x: 280, y: 220, origin: {x: 1, y: .5}, padding: { x: 3, y: 3 }, text: 'close', color: '#fff', background: '#000'});
+		t.closeBtn = new Text({x: 280, y: 225, origin: {x: 1, y: 1}, padding: { x: 3, y: 3 }, text: 'close', color: '#fff', background: '#000'});
 
 		t.closeBtn.on('hover', () => {t.game.cursor('pointer');});
 		t.closeBtn.on('click', () => {t.hide();});
@@ -25,11 +26,27 @@ export class PersonalFile extends File {
 	}
 
 	set person(person) {
-		let t = this;
+		let t = this,
+			pd = person.portraitData,
+			p = personData,
+			info = [...person.info];
+
 		t._person = person;
 		t.personName.text = person.name;
-		t.personInfo.text = person.info;
 		t.personBio.text = person.bio;
+
+		if(pd.length) {
+			info = info.concat([
+				'',
+				'Appearance:',
+				`- ${p.eyes[pd[1]][1]} eyes,`,
+				(pd[0] == 0 && pd[2] == 2 ? `- ${p.hair[pd[0]][pd[2]][1]},` : `- ${p.hairColor[pd[3]][1]}, ${p.hair[pd[0]][pd[2]][1]},`),
+				`- ${p.nose[pd[4]][1]} nose,`,
+				`- wears a ${p.clothesColor[pd[6]][1]} ${p.clothes[pd[5]][2]}.`,
+			]);
+		}
+
+		t.personInfo.text = info;
 	}
 
 	get person() {

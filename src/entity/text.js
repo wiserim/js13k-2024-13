@@ -52,7 +52,7 @@ export class Text extends Entity {
         }
 
         t.width = maxLength * t.size + t.padding.x * 2;
-        t.height = (t._text.length * (6 + t.lineMargin) - 1 * t.size) - t.lineMargin + t.padding.y * 2;
+        t.height = (t._text.length * (6 * t.size + t.lineMargin) - t.size) - t.lineMargin + t.padding.y * 2;
 	}
 
 	get text() {

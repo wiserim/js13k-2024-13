@@ -1,6 +1,7 @@
 import {rand} from '../utils/rand';
 import {shuffle} from '../utils/shuffle';
 import {personData} from '../person-data';
+import {play} from '../utils/music';
 
 export function start() {
 	for(let scene of game.scenes) {
@@ -83,7 +84,14 @@ export function start() {
 	];
 
 	game.scenes.killerFile.person = killer;
+	game.scenes.summary.person = killer;
 
 	game.scenes.menu.hide();
 	game.scenes.killerFile.active = 1;
+
+	//play music
+	if(!game.data.music) {
+		play();
+		game.data.music = 1;
+	}
 }

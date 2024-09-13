@@ -17,11 +17,14 @@ export class Person extends Entity {
 	constructor(args) {
 		super(args);
         let t = this;
-        t.width = 32;
-        t.height = 32;
+        t.width = 36;
+        t.height = 36;
         let c = createCanvas(72, 72);
         t.image = c.canvas;
         t._ctx = c.ctx;
+        t._ctx.translate(0.5, 0.5);
+		t._ctx.lineWidth = 1;
+        t._ctx.imageSmoothingEnabled = false;
 
         Object.assign(t, args);
 
@@ -46,8 +49,8 @@ export class Person extends Entity {
 			t.game.ctx.lineCap = 'round';
 			t.game.ctx.strokeStyle = '#c44';
 			t.game.ctx.stroke(new Path2D(`
-				M ${t.x + 3} ${t.y + 3} Q ${t.x + 16} ${t.y + 12} ${t.x + 29} ${t.y + 29}
-				M ${t.x + 3} ${t.y + 29} Q ${t.x + 12} ${t.y + 16} ${t.x + 29} ${t.y + 3}
+				M ${t.x + 3} ${t.y + 3} Q ${t.x + 18} ${t.y + 12} ${t.x + 33} ${t.y + 33}
+				M ${t.x + 3} ${t.y + 33} Q ${t.x + 12} ${t.y + 18} ${t.x + 33} ${t.y + 3}
 			`));
 		}
 
@@ -62,12 +65,7 @@ export class Person extends Entity {
         t._ctx.clearRect(0, 0, 72, 72);
         t._ctx.fillStyle = '#fff';
         t._ctx.fillRect(0,0,72,72);
-        /*
-        let p = new Path2D(`
-		M 0 72 L 0 60 L 25 55 L 20 50 L 17 45 L 17 25 L 20 20 L 25 15 L 30 13
-		L 42 13 L 47 15 L 52 20 L 55 25 L 55 45 L 52 50 L 45 55 L 72 60 L 72 72
-		Z`);
-		*/
+        
 		//draw silhuette
         t._ctx.fillStyle = '#a8a8b8';
         t._ctx.fill(new Path2D(p.silhuette));
