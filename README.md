@@ -21,3 +21,6 @@ To run dev server use ```npm run dev``` command.
 To build and zip game use ```npm run build``` command.
 
 The build HTML file and it's zip file will be in ```build``` folder.
+
+## Notice
+Music generation was based on [xem](https://github.com/xem) [miniMusic](https://github.com/xem/miniMusic).
