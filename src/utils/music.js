@@ -16,7 +16,7 @@ export function play() {
 			osc.start(i*.325),
 			osc.frequency.setValueAtTime(220*1.06**(13-notes[i]),i*.325),
 			gain.gain.setValueAtTime(1,i*.325),
-			gain.gain.setTargetAtTime(.0001,i*.325+.28,.005),
+			gain.gain.setTargetAtTime(.0001,i*.325+.26,.005),
 			osc.stop(i*.325+.29);
 		}
 	}

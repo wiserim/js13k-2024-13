@@ -73,7 +73,10 @@ export function init() {
 	}
 
 	//bind suspect file
-	suspectFile.on('hide', () => setTimeout(board.interactive = 1, 100));
+	suspectFile.on('hide', () => {
+		game.mouse.down = 0;
+		board.interactive = 1;
+	});
 	//bind suspect file buttons
 	arrestBtn.on('hover', () => game.cursor('pointer'));
 	arrestBtn.on('click', () => {
@@ -93,9 +96,15 @@ export function init() {
 	suspectFile.add(protectBtn);
 
 	//bind killer file
-	killerFile.on('hide', () => setTimeout(board.interactive = 1, 100));
+	killerFile.on('hide', () => {
+		game.mouse.down = 0;
+		board.interactive = 1;
+	});
 	//bind summary
-	summary.on('hide', () => setTimeout(game.scenes.menu.show(), 100));
+	summary.on('hide', () => {
+		game.mouse.down = 0;
+		game.scenes.menu.show()
+	});
 
 	game.data.music = 0;
 }

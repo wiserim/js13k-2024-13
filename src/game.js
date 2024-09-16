@@ -11,7 +11,6 @@ let game = {
     ctx: c1.getContext('2d'),
     assets: {}, 
     scenes: [],
-    //paused: false,
     mouse: {
         x: 0,
         y: 0,
